@@ -6,7 +6,7 @@ public class Room : MonoBehaviour
 
     public int width;   //The number of tiles
     public int height;  //The number of tiles
-	public int seed=1337; //The room seed
+	private int _seed=1337; //The room seed
     private Vector2 posi;
     Manager.tile[,] rects;
 
@@ -114,6 +114,11 @@ public class Room : MonoBehaviour
             }
         }
     }
+
+	public int seed{
+		set {_seed = value;}
+		get {return _seed;}
+	}
 
 
 }
