@@ -25,6 +25,8 @@ public static class Manager
 
     public enum tile { nadda, wall, floor, door }
 
+	public enum direction { north, east, south, west }
+
     public static Dictionary<tile, Sprite> tiles = new Dictionary<tile, Sprite>()
     {
         {tile.nadda, null},
