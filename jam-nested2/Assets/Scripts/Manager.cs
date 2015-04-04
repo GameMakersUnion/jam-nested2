@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Manager : MonoBehaviour
 {
 
-    public const int PixelToUnit = 1;
+    public const int PixelToUnit = 32; //scale to multiple all instantiations in space upon
     
     public enum hue { Red, Orange, Yellow, GreenLight, Green, BlueLight, Blue, Violet, Lavender }
 
