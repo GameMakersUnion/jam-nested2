@@ -27,12 +27,12 @@ public static class Manager
 
 	public enum direction { north, east, south, west }
 
-    public static Dictionary<tile, Sprite> tiles = new Dictionary<tile, Sprite>()
+    public static Dictionary<tile, GameObject> tiles = new Dictionary<tile, GameObject>()
     {
         {tile.nadda, null},
-        {tile.wall, Resources.Load<Sprite>("tiles/wall")},
-        {tile.floor, Resources.Load<Sprite>("tiles/floor")},
-        {tile.door, Resources.Load<Sprite>("tiles/door")}
+        {tile.wall, Resources.Load<GameObject>("tiles/wall")},
+        {tile.floor, Resources.Load<GameObject>("tiles/floor")},
+        {tile.door, Resources.Load<GameObject>("tiles/door")}
     };
 
 
@@ -46,4 +46,6 @@ public static class Manager
         if (colorToUse > hackNumHues - 1){ colorToUse = 0; }
         return colorToUse;
     }
+
+    public const int minRoomSize = 2;
 }
