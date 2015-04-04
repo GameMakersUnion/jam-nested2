@@ -2,14 +2,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Manager : MonoBehaviour
+public static class Manager
 {
 
     public const int PixelToUnit = 32; //scale to multiple all instantiations in space upon
     
     public enum hue { Red, Orange, Yellow, GreenLight, Green, BlueLight, Blue, Violet, Lavender }
 
-    public Dictionary<hue, Color32> hues = new Dictionary<hue, Color32>()
+    public static Dictionary<hue, Color32> hues = new Dictionary<hue, Color32>()
     {
         {hue.Red, new Color(1, 0, 0, 1)},
         {hue.Orange, new Color(1, 116f/225f, 0, 1)},
@@ -25,7 +25,7 @@ public class Manager : MonoBehaviour
 
     public enum tile { nadda, wall, floor, door }
 
-    public Dictionary<tile, Sprite> tiles = new Dictionary<tile, Sprite>()
+    public static Dictionary<tile, Sprite> tiles = new Dictionary<tile, Sprite>()
     {
         {tile.nadda, null},
         {tile.wall, Resources.Load<Sprite>("tiles/wall")},
@@ -34,20 +34,10 @@ public class Manager : MonoBehaviour
     };
 
 
-    private int colorToUse = 0;
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    private static int colorToUse = 0;
 
 
-    public int GetNextColor()
+    public static int GetNextColor()
     {
         int hackNumHues = Enum.GetNames(typeof(hue)).Length;
         colorToUse++;
