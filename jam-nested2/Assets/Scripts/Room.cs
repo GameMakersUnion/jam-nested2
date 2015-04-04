@@ -8,7 +8,7 @@ public class Room : MonoBehaviour
     public int height;  //The number of tiles
 	private int _seed=1337; //The room seed
     private Vector2 posi;
-    Manager.tile[,] rects;
+	private Manager.tile[,] _rects;
 
 	// Use this for initialization
 	void Start ()
@@ -49,10 +49,10 @@ public class Room : MonoBehaviour
             //populate data
             this.width = width;
             this.height = height;
-            this.rects = rects;
+			this._rects = rects;
             //Start();
             this.posi = posi; //bottom-left origin
-            rects = new Manager.tile[width,height];
+			_rects = new Manager.tile[width,height];
 
             //store as walls at edges of room
             for (int x = 0; x < width; x++)
@@ -61,11 +61,11 @@ public class Room : MonoBehaviour
                 {
                     if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
                     {
-                        rects[x, y] = Manager.tile.wall;
+						_rects[x, y] = Manager.tile.wall;
                     }
                     else
                     {
-                        rects[x, y] = Manager.tile.nadda;
+						_rects[x, y] = Manager.tile.nadda;
                     }
                 }
             }
@@ -88,7 +88,7 @@ public class Room : MonoBehaviour
             {
                 for (int y = 0; y < height; y++)
                 {
-                    rects[x, y] = Manager.tile.floor;
+					_rects[x, y] = Manager.tile.floor;
                 }
             }
 
@@ -102,7 +102,7 @@ public class Room : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Manager.tile tile = rects[x, y];
+				Manager.tile tile = _rects[x, y];
                 GameObject what = Manager.tiles[tile];
                 Vector3 where = new Vector3(x + posi.x, y + posi.y, 0) * Manager.PixelToUnit;
                 Quaternion rot = Quaternion.identity;
@@ -118,6 +118,11 @@ public class Room : MonoBehaviour
 	public int seed{
 		set {_seed = value;}
 		get {return _seed;}
+	}
+
+	private Manager.tile[,] rects{
+		set {_rects = value;}
+		get {return _rects;}
 	}
 
 
