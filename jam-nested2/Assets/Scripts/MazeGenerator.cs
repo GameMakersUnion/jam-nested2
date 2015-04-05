@@ -3,6 +3,7 @@ using System.Collections;
 
 public class MazeGenerator {
 
+
 	// Use this for initialization
 	void Start () {
 	
@@ -13,10 +14,82 @@ public class MazeGenerator {
 	
 	}
 
+	public void GenerateStep(ref Manager.tile[,] map, int currentX, int currentY){
+
+		//Debug.Log ("CurrentX: " + currentX + " " + "CurrentY: " + currentY );
+		if (map == null)
+			return;
+		if (map[currentX,currentY] != Manager.tile.nadda )
+			return;
+		//Manager.tile[,] directions = 1;
+		//Shuffle the directions
+		map [currentX, currentY] = Manager.tile.floor;
+		GenerateStep(ref map, currentX,currentY+1);
+		GenerateStep(ref map, currentX+1,currentY);
+		GenerateStep(ref map, currentX,currentY-1);
+		GenerateStep(ref map, currentX-1,currentY);
+		//Move until you run out of directions
+		/*
+			switch (Random.Range (1,5)) {
+			case Manager.direction.north: //North
+				map [currentX, currentY] = Manager.tile.floor;
+				GenerateStep(ref map, currentX,currentY+1);
+				break; 
+			case Manager.direction.east: //East
+				map [currentX, currentY] = Manager.tile.floor;
+				GenerateStep(ref map, currentX+1,currentY);
+				break; 
+			case Manager.direction.south: //South
+				map [currentX, currentY] = Manager.tile.floor;
+				GenerateStep(ref map, currentX,currentY-1);
+				break; 
+			case Manager.direction.west: //West
+				map [currentX, currentY] = Manager.tile.floor;
+				GenerateStep(ref map, currentX-1,currentY);
+				break; 
+			default:
+				break;
+			}
+		*/
+		return;
+
+	}
 	public void Generate(Room room){
 		Manager.tile[,] map = room.map; 
 		int seed = room.seed;
+		Random.seed = seed;
+		int startX=-1,startY=-1;
 
+		//Find an empty spot and don't include the outer walls
+		for (int x=1, end=0; x<map.GetLength(0)-1; x++) {
+			for (int y=1; y<map.GetLength(1)-1; y++) {
+				//Manager.tile.wall
+				if (map [x, y] == Manager.tile.nadda) {
+					{
+						startX  = x;
+						startY  = y;
+						end = 1;
+						break;
+					}
+				}
+			}
+			if(end==1) break;
+		}
+		Debug.Log ("StartX: " + startX + " " + "StartY: " + startY );
+		if(startX < 0 || startY <0){//We didn't find any empty spaces done
+			return;
+		}
+
+		GenerateStep (ref map, startX, startY);
+
+		//Update the map
+		room.map = map;
+	}
+	/*
+	public void Generate(Room room){
+		Manager.tile[,] map = room.map; 
+		int seed = room.seed;
+		Manager.direction randomEmptyDirection;
 		int startX=-1,startY=-1,currentX=0,currentY=0;
 		int random;
 		//Random.seed = seed;
@@ -43,10 +116,27 @@ public class MazeGenerator {
 		Debug.Log ("CurrentX: " + currentX + " " + "CurrentY: " + currentY );
 		//Start filling in the maze
 		//Move in a random direction
-		for (int i=0; i<200; i++) {
+		for (int i=0; i<1000; i++) {
 			Debug.Log ("Step: "+ i + " CurrentX: " + currentX + " " + " CurrentY: " + currentY );
 			int modX=currentX, modY=currentY;
-			switch (FindRandomEmptyDirection(map,currentX, currentY)) {
+			randomEmptyDirection = FindRandomEmptyDirection(map,currentX, currentY);
+			if(randomEmptyDirection == Manager.direction.invalid){
+				for (int x=1, end=0; x<map.GetLength(0)-1; x++) {
+					for (int y=1; y<map.GetLength(1)-1; y++) {
+						//Manager.tile.wall
+						if (map [x, y] == Manager.tile.nadda) {
+							{
+								startX = currentX = x;
+								startY = currentY = y;
+								end = 1;
+								break;
+							}
+						}
+					}
+					if(end==1) break;
+				}
+			}
+			switch (randomEmptyDirection) {
 			case Manager.direction.north: //North
 				modX = currentX;
 				modY = currentY + 1;
@@ -105,7 +195,7 @@ public class MazeGenerator {
 		//Update the map
 		room.map = map;
 	}
-
+*/
 	bool IsEmpty(Manager.tile[,] map,int x, int y){ //Is the the tile empty
 		if(map[x,y] == Manager.tile.nadda){
 			return true;
@@ -159,6 +249,7 @@ public class MazeGenerator {
 
 	bool IsConnector(Manager.tile[,] map,int x, int y){ //Does the tile connect to any other tile, true if it would contain two floors if removed
 		int count=0;
+		//return false;//disabled for now
 		/*
 		for (int i=-1; i<2; i++) {
 			for (int j=-1; j<2; j++) {
