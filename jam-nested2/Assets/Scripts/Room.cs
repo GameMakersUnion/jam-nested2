@@ -48,7 +48,7 @@ public class Room : MonoBehaviour
     //the top-level main outer room, publically callable
     public void Generate( int width, int height, Vector2 posiWorld )
     {
-        Random.seed = seed_;
+        //Random.seed = seed_;
 
         //exit if too small
         int minSz = Manager.minRoomSize + 2;
@@ -124,7 +124,7 @@ public class Room : MonoBehaviour
             int tryPosiX = Random.Range(minX, maxX);
             int tryPosiY = Random.Range(minY, maxY);
 
-            Debug.Log("trying child at (" + (tryPosiX + width) + "," +  (tryPosiY + height) + "), size (" + width +","+ height+")");
+            //Debug.Log("trying child at (" + (tryPosiX + width) + "," +  (tryPosiY + height) + "), size (" + width +","+ height+")");
 
             bool collisionsFound = CheckCollisions(tryPosiX, tryPosiY, width, height);
 
@@ -197,22 +197,22 @@ public class Room : MonoBehaviour
     {
         string dbgStr = "";
         //does it not collide with any rooms?
-        for (int x = 0; x < width; x++)
+        for (int x = -1; x < width + 1; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = -1; y < height + 1; y++)
             {
                 Manager.tile tryTile = map_[tryPosiX + x, tryPosiY + y];
                 dbgStr += tryTile + "(" + (tryPosiX + x) + ":" + (tryPosiY + y) + "),";
                 if (tryTile == Manager.tile.room)
                 {
-                    Debug.Log(dbgStr + "COLLISION!");
+                    //Debug.Log(dbgStr + "COLLISION!");
                     return true;
                 }
 
             }
             dbgStr += "\n";
         }
-        Debug.Log(dbgStr);
+        //Debug.Log(dbgStr);
         return false;
     }
 
