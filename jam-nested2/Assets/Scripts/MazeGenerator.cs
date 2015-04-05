@@ -51,7 +51,7 @@ public class MazeGenerator {
 				modX = currentX;
 				modY = currentY + 1;
 				if(IsInRange(map, modX, modY)){
-					map [modX, modY] = Manager.tile.floor;
+					//map [modX, modY] = Manager.tile.floor;
 
 					if (IsEmpty (map, modX, modY) && !IsConnector(map, modX,modY)) {
 						map [modX, modY] = Manager.tile.floor;
@@ -63,7 +63,7 @@ public class MazeGenerator {
 				modX = currentX + 1;
 				modY = currentY;
 				if(IsInRange(map, modX, modY)){
-					map [modX, modY] = Manager.tile.floor;
+					///map [modX, modY] = Manager.tile.floor;
 					if (IsEmpty (map, modX, modY) && !IsConnector(map, modX,modY)) {
 						map [modX, modY] = Manager.tile.floor;
 
@@ -74,7 +74,7 @@ public class MazeGenerator {
 				modX = currentX;
 				modY = currentY-1;
 				if(IsInRange(map, modX, modY)){
-					map [modX, modY] = Manager.tile.floor;
+					//map [modX, modY] = Manager.tile.floor;
 					if (IsEmpty (map, modX, modY) && !IsConnector(map, modX,modY)) {
 						map [modX, modY] = Manager.tile.floor;
 
@@ -85,7 +85,7 @@ public class MazeGenerator {
 				modX = currentX;
 				modY = currentY-1;
 				if(IsInRange(map, modX, modY)){
-					map [modX, modY] = Manager.tile.floor;
+					//map [modX, modY] = Manager.tile.floor;
 					if (IsEmpty (map, modX, modY) && !IsConnector(map, modX,modY)) {
 						map [modX, modY] = Manager.tile.floor;
 
@@ -96,7 +96,7 @@ public class MazeGenerator {
 			default:
 				break;
 			}
-			if(IsInRange(map, modX, modY)){
+			if(IsInRange(map, modX, modY) && !IsConnector(map, modX,modY)){//Is within map and not a connector
 				currentX = modX;
 				currentY = modY;
 			}
@@ -159,6 +159,7 @@ public class MazeGenerator {
 
 	bool IsConnector(Manager.tile[,] map,int x, int y){ //Does the tile connect to any other tile, true if it would contain two floors if removed
 		int count=0;
+		/*
 		for (int i=-1; i<2; i++) {
 			for (int j=-1; j<2; j++) {
 				if(i==x && j==y){
@@ -167,12 +168,36 @@ public class MazeGenerator {
 					count++;
 				}
 			}
+		}*/
+		Manager.tile wall = Manager.tile.wall;
+		Manager.tile floor = Manager.tile.floor;
+		if ((map[x-1,y] == wall || map[x-1,y] == floor) && (map[x+1,y] == wall || map[x+1,y] == floor) ) {//West and East
+			count++;
+		}
+		if ((map[x-1,y] == wall || map[x-1,y] == floor) && (map[x,y+1] == wall || map[x,y+1] == floor)) {//West and North
+			count++;
+		}
+		if ((map[x-1,y] == wall || map[x-1,y] == floor) && (map[x,y-1] == wall || map[x,y-1] == floor )) {//West and South
+			count++;
+		}
+		if ((map[x,y+1] == wall || map[x,y+1] == floor)&& (map[x+1,y] == wall || map[x+1,y] == floor)) {//North and East
+			count++;
+		}
+		if ((map[x,y+1] == wall || map[x,y+1] == floor) && (map[x,y-1] == wall || map[x,y-1] == floor)) {//North and South
+			count++;
+		}
+		if ((map[x+1,y] == wall || map[x+1,y] == floor)&& (map[x,y-1] == wall || map[x,y-1] == floor)) {//East and South
+			count++;
 		}
 
-		if(count > 2){
+
+
+
+		if(count > 0){
 			Debug.Log("IsConnector");
 			return true;
 		}
+		Debug.Log("Connections: " + count);
 		return false;
 	}
 

@@ -7,8 +7,8 @@ public class VictorRoomDriver : MonoBehaviour {
 	void Start ()
 	{
 		//Room room = new Room();
-		int width = 20;
-		int height = 20; 
+		int width = 40;
+		int height = 40; 
 		Vector2 posi = new Vector2(0,0);
 		GameObject go = (GameObject)Instantiate( Resources.Load("tiles/room"), new Vector3(0, 0, 0), Quaternion.identity);
 		Room room = go.GetComponent<Room>();
