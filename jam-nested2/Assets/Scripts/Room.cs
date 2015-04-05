@@ -7,8 +7,8 @@ public class Room : MonoBehaviour
     public int width;   //The number of tiles
     public int height;  //The number of tiles
     private Vector2 posi;
-	private Manager.tile[,] _rects;
-    private int _seed = 1337; //The room seed
+	private Manager.tile[,] map_;
+    private int seed_ = 1337; //The room seed
     private int numRandRooms;
 
 	// Use this for initialization
@@ -26,7 +26,7 @@ public class Room : MonoBehaviour
     {
         this.width = width;
         this.height = height;
-        this.rects = new Manager.tile[width, height];
+        this.map = new Manager.tile[width, height];
         //Start();
         transform.position = posi; //bottom-left origin
     }
@@ -50,9 +50,9 @@ public class Room : MonoBehaviour
             //populate data
             this.width = width;
             this.height = height;
-			this._rects = rects;
+			this.map_ = map;
             this.posi = posi; //bottom-left origin
-			_rects = new Manager.tile[width,height];
+			map_ = new Manager.tile[width,height];
 
             //store as walls at edges of room
             for (int x = 0; x < width; x++)
@@ -61,11 +61,11 @@ public class Room : MonoBehaviour
                 {
                     if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
                     {
-						_rects[x, y] = Manager.tile.wall;
+						map_[x, y] = Manager.tile.wall;
                     }
                     else
                     {
-						_rects[x, y] = Manager.tile.nadda;
+						map_[x, y] = Manager.tile.nadda;
                     }
                 }
             }
@@ -88,7 +88,7 @@ public class Room : MonoBehaviour
             {
                 for (int y = 0; y < height; y++)
                 {
-					_rects[x, y] = Manager.tile.floor;
+					map_[x, y] = Manager.tile.floor;
                 }
             }
 
@@ -108,7 +108,7 @@ public class Room : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-				Manager.tile tile = _rects[x, y];
+				Manager.tile tile = map_[x, y];
                 GameObject what = Manager.tiles[tile];
                 Vector3 where = new Vector3(x + posi.x, y + posi.y, 0) * Manager.PixelToUnit;
                 Quaternion rot = Quaternion.identity;
@@ -122,13 +122,13 @@ public class Room : MonoBehaviour
     }
 
 	public int seed{
-		set {_seed = value;}
-		get {return _seed;}
+		set {seed_ = value;}
+		get {return seed_;}
 	}
 
-	public Manager.tile[,] rects{
-		set {_rects = value;}
-		get {return _rects;}
+	public Manager.tile[,] map{
+		set {map_ = value;}
+		get {return map_;}
 	}
 
 
