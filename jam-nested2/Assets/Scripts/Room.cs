@@ -62,9 +62,9 @@ public class Room : MonoBehaviour
         //populate data
         this.width_ = width;
         this.height_ = height;
-		this.map_ = map;
+		//this.map_ = map;
         this.posi_ = posiWorld; //bottom-left origin
-		map_ = new Manager.tile[width,height];
+		this.map_ = new Manager.tile[width,height];
         numRandRooms_ = Random.Range(Manager.minRandRooms, Manager.maxRandRooms);
 
         //create empty walls object
@@ -118,14 +118,19 @@ public class Room : MonoBehaviour
             int minX = 1; //inside wall
             int maxX = this.width_ - width;
             int minY = 1; //inside wall
-            int maxY = this.height_ - height;            
+            int maxY = this.height_ - height;
+
+            //origin of child room relative to parent
             int tryPosiX = Random.Range(minX, maxX);
             int tryPosiY = Random.Range(minY, maxY);
 
-            Debug.Log("trying child " + tryPosiX + width + "," + this.width_ + "," + tryPosiY + height + "," + this.height_);
+            Debug.Log("trying child at (" + (tryPosiX + width) + "," +  (tryPosiY + height) + "), size (" + width +","+ height+")");
 
-            //it fits, place it!
-            if (tryPosiX + width <= this.width_ && tryPosiY + height <= this.height_)
+            bool collisionsFound = CheckCollisions(tryPosiX, tryPosiY, width, height);
+
+            //does it fit?
+            //if (tryPosiX + width <= this.width_ && tryPosiY + height <= this.height_)
+            if (collisionsFound == false)
             {
 
                 //store as floor tiles entirely, overwrite any walls or anything existing
@@ -178,7 +183,7 @@ public class Room : MonoBehaviour
             int tryWidth = Random.Range(minRandRoomSz, maxRandRoomSz);
             int tryHeight = Random.Range(minRandRoomSz, maxRandRoomSz);
 
-            Debug.Log("trying child sized " + tryWidth+","+ tryHeight);
+            //Debug.Log("trying child sized " + tryWidth+","+ tryHeight);
 
             GenerateChild(tryWidth, tryHeight);
             numRandRooms_--;
@@ -186,6 +191,29 @@ public class Room : MonoBehaviour
             CreateChildren();
 
         }
+    }
+
+    private bool CheckCollisions(int tryPosiX, int tryPosiY, int width, int height)
+    {
+        string dbgStr = "";
+        //does it not collide with any rooms?
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Manager.tile tryTile = map_[tryPosiX + x, tryPosiY + y];
+                dbgStr += tryTile + "(" + (tryPosiX + x) + ":" + (tryPosiY + y) + "),";
+                if (tryTile == Manager.tile.room)
+                {
+                    Debug.Log(dbgStr + "COLLISION!");
+                    return true;
+                }
+
+            }
+            dbgStr += "\n";
+        }
+        Debug.Log(dbgStr);
+        return false;
     }
 
     public void Populate(int width, int height, Vector2 posi, Manager.tile[,] map)
