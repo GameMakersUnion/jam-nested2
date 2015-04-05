@@ -13,6 +13,8 @@ public class VictorRoomDriver : MonoBehaviour {
 		GameObject go = (GameObject)Instantiate( Resources.Load("tiles/room"), new Vector3(0, 0, 0), Quaternion.identity);
 		Room room = go.GetComponent<Room>();
 		room.Generate(Manager.tile.wall, width, height, posi );
+		MazeGenerator maze = new MazeGenerator ();
+		maze.Generate(room);
 		room.Draw();
 		
 		
