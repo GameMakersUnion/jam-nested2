@@ -12,7 +12,8 @@ public class IanRoomCreate : MonoBehaviour {
         Vector2 posi = new Vector2(0,0);
 	    GameObject go = (GameObject)Instantiate( Resources.Load("tiles/room"), new Vector3(0, 0, 0), Quaternion.identity);
 	    Room room = go.GetComponent<Room>();
-        room.Generate(Manager.tile.wall, width, height, posi );
+	    go.name = "RoomMain";
+        room.Generate( width, height, posi );
 	    room.Draw();
 
 

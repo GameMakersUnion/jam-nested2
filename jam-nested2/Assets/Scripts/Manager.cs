@@ -23,13 +23,14 @@ public static class Manager
     };
 
 
-    public enum tile { nadda, wall, floor, door }
+    public enum tile { nadda, room, wall, floor, door }
 
 	public enum direction { north, east, south, west }
 
     public static Dictionary<tile, GameObject> tiles = new Dictionary<tile, GameObject>()
     {
         {tile.nadda, null},
+        {tile.room, null},
         {tile.wall, Resources.Load<GameObject>("tiles/wall")},
         {tile.floor, Resources.Load<GameObject>("tiles/floor")},
         {tile.door, Resources.Load<GameObject>("tiles/door")}
@@ -48,4 +49,7 @@ public static class Manager
     }
 
     public const int minRoomSize = 2;
+
+    public const int minRandRooms = 2;
+    public const int maxRandRooms = 30;
 }
