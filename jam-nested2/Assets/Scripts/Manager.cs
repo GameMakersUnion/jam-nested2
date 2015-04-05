@@ -25,7 +25,7 @@ public static class Manager
 
     public enum tile { nadda, room, wall, floor, door }
 
-	public enum direction { north, east, south, west }
+	public enum direction { invalid, north, east, south, west }
 
     public static Dictionary<tile, GameObject> tiles = new Dictionary<tile, GameObject>()
     {
