@@ -6,9 +6,10 @@ public class Room : MonoBehaviour
 
     public int width;   //The number of tiles
     public int height;  //The number of tiles
-	private int _seed=1337; //The room seed
     private Vector2 posi;
 	private Manager.tile[,] _rects;
+    private int _seed = 1337; //The room seed
+    private int numRandRooms;
 
 	// Use this for initialization
 	void Start ()
@@ -50,7 +51,6 @@ public class Room : MonoBehaviour
             this.width = width;
             this.height = height;
 			this._rects = rects;
-            //Start();
             this.posi = posi; //bottom-left origin
 			_rects = new Manager.tile[width,height];
 
@@ -95,6 +95,12 @@ public class Room : MonoBehaviour
         }
     }
 
+
+    void CreateRandom()
+    {
+        
+    }
+
     public void Draw()
     {
         //tiles grow out upwards and rightwards, thus a Room's origin is bottom-left
@@ -120,7 +126,7 @@ public class Room : MonoBehaviour
 		get {return _seed;}
 	}
 
-	private Manager.tile[,] rects{
+	public Manager.tile[,] rects{
 		set {_rects = value;}
 		get {return _rects;}
 	}
