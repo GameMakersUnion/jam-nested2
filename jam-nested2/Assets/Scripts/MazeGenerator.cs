@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MazeGenerator {
 
@@ -28,10 +29,38 @@ public class MazeGenerator {
 		//Manager.tile[,] directions = 1;
 		//Shuffle the directions
 		map [currentX, currentY] = Manager.tile.floor;
-		GenerateStep(ref map, currentX,currentY+1);
-		GenerateStep(ref map, currentX+1,currentY);
-		GenerateStep(ref map, currentX,currentY-1);
-		GenerateStep(ref map, currentX-1,currentY);
+
+
+
+
+		Manager.direction[] alpha = new Manager.direction[]{Manager.direction.north, Manager.direction.east, Manager.direction.south, Manager.direction.west};
+		//Do a shuffle
+		for (int i = 0; i < alpha.Length; i++) {
+			Manager.direction temp = alpha[i];
+			int randomIndex = Random.Range(i, alpha.Length);
+			alpha[i] = alpha[randomIndex];
+			alpha[randomIndex] = temp;
+		}
+		//Then go through the list
+		foreach (Manager.direction dir in alpha)
+		              {
+			switch (dir) {
+			case Manager.direction.north: //North
+				GenerateStep(ref map, currentX,currentY+1);
+				break; 
+			case Manager.direction.east: //East
+				GenerateStep(ref map, currentX+1,currentY);
+				break; 
+			case Manager.direction.south: //South
+				GenerateStep(ref map, currentX,currentY-1);
+				break; 
+			case Manager.direction.west: //West
+				GenerateStep(ref map, currentX-1,currentY);
+				break; 
+			default:
+				break;
+			}
+		};
 		//Move until you run out of directions
 		/*
 			switch (Random.Range (1,5)) {
