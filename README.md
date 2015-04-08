@@ -6,6 +6,11 @@ Will these be deployable and retractable for strategy? Will it be a survival-aga
 
 ## Progression
 
+####It's a mazing!
+  ![readme image][7]
+  [7]: https://raw.githubusercontent.com/GameMakersUnion/jam-nested2/master/README_ALPHA_07.png 
+  ![readme image][8]
+  [8]: https://raw.githubusercontent.com/GameMakersUnion/jam-nested2/master/README_ALPHA_08.png 
 
 
 #### Maze generation combined with child-room spawning
