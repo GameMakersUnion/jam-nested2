@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public class Room : MonoBehaviour
 {
@@ -11,7 +14,10 @@ public class Room : MonoBehaviour
     private int seed_ = 1337; //The room seed
     private int numRandRooms_;
     private static int childCounter_ = 0;
-
+    private bool topDog_;
+    private List<Room> rooms_ = new List<Room>();
+    private bool holdersDone = false;
+    private Room parent_ = null;
 
     public int seed{
 		set {seed_ = value;}
@@ -49,6 +55,7 @@ public class Room : MonoBehaviour
     public void Generate( int width, int height, Vector2 posiWorld )
     {
         //Random.seed = seed_;
+        topDog_ = true;
 
         //exit if too small
         int minSz = Manager.minRoomSize + 2;
@@ -67,9 +74,6 @@ public class Room : MonoBehaviour
 		this.map_ = new Manager.tile[width,height];
         numRandRooms_ = Random.Range(Manager.minRandRooms, Manager.maxRandRooms);
 
-        //create empty walls object
-        GameObject walls = new GameObject("walls");
-        walls.transform.parent = transform;
 
         //store as walls at edges of room
         for (int x = 0; x < width; x++)
@@ -87,13 +91,9 @@ public class Room : MonoBehaviour
             }
         }
 
-        //create empty rooms object
-        GameObject rooms = new GameObject("rooms");
-        rooms.transform.parent = this.transform;
-
         CreateChildren();
         //Redrwa
-        Draw();
+        //Draw();
 
     }
 
@@ -109,6 +109,7 @@ public class Room : MonoBehaviour
         //    return;
         //}
 
+        parent_ = this;
 
         int numAttempts = 20;
 
@@ -148,10 +149,11 @@ public class Room : MonoBehaviour
                 //make child room
                 GameObject go = (GameObject)Instantiate(Resources.Load("tiles/room"), new Vector3(tryPosiX, tryPosiY, 0) * Manager.PixelToUnit, Quaternion.identity);
                 go.name = "Room" + childCounter_++;
-                go.transform.parent = transform.FindChild("rooms");
+                //go.transform.parent = transform.FindChild("rooms");
                 Room room = go.GetComponent<Room>();
                 room.Populate(width, height, this.posi_ + new Vector2(tryPosiX, tryPosiY), childMap);
-                room.Draw();
+                rooms_.Add(room);
+                //room.Draw();
 
                 break;
             }
@@ -225,9 +227,27 @@ public class Room : MonoBehaviour
     }
 
     //also does naming and parenting, may as well since intantiation occurs here.
+    //draw each tile, as well as each child room and it's tiles
+    //each room gets drawn once only
     public void Draw()
     {
-        Transform walls = transform.FindChild("walls");
+
+        if (!holdersDone)
+        {
+            //create empty object containers: "floors", "rooms", "walls", etc.
+            foreach (Manager.tile tile in Enum.GetValues(typeof(Manager.tile)))
+            {
+                if (tile != Manager.tile.nadda)
+                {
+                    GameObject holder = new GameObject(tile + "s");
+                    holder.transform.parent = transform;
+                }
+            }
+            holdersDone = true;
+        }
+
+        Transform whatHolder = null;
+        string whatNew, whatLast = null;
         Manager.hue hue = (Manager.hue) Manager.GetNextColor();
         int count = 0;
 
@@ -243,20 +263,48 @@ public class Room : MonoBehaviour
 
                 if (what != Manager.tiles[Manager.tile.nadda] && what != Manager.tiles[Manager.tile.room])
                 {
-                    GameObject go = (GameObject)Instantiate(what, where, rot);
-                    if (what == Manager.tiles[Manager.tile.wall])
+                    //find latest container
+                    if (whatLast != tile.ToString())
                     {
-                        go.transform.parent = walls;
+                        //append s for container of that type
+                        whatHolder = transform.FindChild(tile + "s");
+                        whatLast = tile.ToString();
                     }
-                    //since this is a room object, and it's nestable, this makes sense.
-                    else if (what == Manager.tiles[Manager.tile.floor])
+
+                    GameObject go = (GameObject)Instantiate(what, where, rot);
+                    go.transform.parent = whatHolder;
+                    if (what == Manager.tiles[Manager.tile.room])
                     {
                         go.transform.parent = this.transform;
                     }
-                    go.name = what.ToString().Split(' ')[0] + count++;
+
+                    //if (what == Manager.tiles[Manager.tile.floor] && this.transform.GetComponent<Room>().topDog_ == false)
+                    //{
+                    //    //shove the floor tile into the children rooms
+                    //    go.transform.parent = this.transform;
+                    //}
+
+                    //if (what == Manager.tiles[Manager.tile.wall])
+                    //{
+                    //    go.transform.parent = whatParent;
+                    //}
+                    ////since this is a room object, and it's nestable, this makes sense.
+                    //else if (what == Manager.tiles[Manager.tile.floor])
+                    //{
+                    //    go.transform.parent = this.transform;
+                    //}
+                    go.name = whatLast + count++;
                     go.GetComponent<SpriteRenderer>().color = Manager.hues[hue];
+                    //Debug.Log(this.transform.name + ", " + go.name);
+
                 }
             }
+        }
+
+        //child rooms
+        foreach (Room room in rooms_)
+        {
+            room.Draw();
         }
     }
 

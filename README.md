@@ -8,19 +8,24 @@ Will these be deployable and retractable for strategy? Will it be a survival-aga
 
 
 
-Maze generation combined with child-room spawning
+#### Maze generation combined with child-room spawning
   ![readme image][3]
   [3]: https://raw.githubusercontent.com/GameMakersUnion/jam-nested2/master/README_ALPHA_03.png 
   ![readme image][4]
   [4]: https://raw.githubusercontent.com/GameMakersUnion/jam-nested2/master/README_ALPHA_04.png 
 
-Earlier versions where rooms overlapped, then were too close.
+####Earlier versions where rooms overlapped, then were too close.
   ![readme image][1]
   [1]: https://raw.githubusercontent.com/GameMakersUnion/jam-nested2/master/README_ALPHA_01.png
   ![readme image][2]
   [2]: https://raw.githubusercontent.com/GameMakersUnion/jam-nested2/master/README_ALPHA_02.png 
 
   
-Blooper!
+####Bloopers!
+
   ![readme image][5]
   [5]: https://raw.githubusercontent.com/GameMakersUnion/jam-nested2/master/README_ALPHA_00.png 
+
+Swiss cheese!
+    ![readme image][6]
+  [6]: https://raw.githubusercontent.com/GameMakersUnion/jam-nested2/master/README_ALPHA_05.png 

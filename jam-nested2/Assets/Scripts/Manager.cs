@@ -30,7 +30,7 @@ public static class Manager
     public static Dictionary<tile, GameObject> tiles = new Dictionary<tile, GameObject>()
     {
         {tile.nadda, null},
-        {tile.room, null},
+        {tile.room, Resources.Load<GameObject>("tiles/room")},
         {tile.wall, Resources.Load<GameObject>("tiles/wall")},
         {tile.floor, Resources.Load<GameObject>("tiles/floor")},
         {tile.door, Resources.Load<GameObject>("tiles/door")}
