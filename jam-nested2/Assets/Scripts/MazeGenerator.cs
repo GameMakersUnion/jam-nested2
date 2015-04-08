@@ -20,6 +20,7 @@ public class MazeGenerator {
 		//Debug.Log ("CurrentX: " + currentX + " " + "CurrentY: " + currentY );
 		if (map == null)
 			return;
+		//Debug.Log (currentX + " " + currentY);
 		if (map[currentX,currentY] != Manager.tile.nadda )
 			return;
 		if(!IsOpen(map,currentX,currentY))
@@ -92,31 +93,45 @@ public class MazeGenerator {
 		int seed = room.seed;
 		Random.seed = seed;
 		int startX=-1,startY=-1;
+		bool done = false;
 
 		//Find an empty spot and don't include the outer walls
-		for (int x=1, end=0; x<map.GetLength(0)-1; x++) {
-			for (int y=1; y<map.GetLength(1)-1; y++) {
-				//Manager.tile.wall
-				if (map [x, y] == Manager.tile.nadda) {
-					{
-						startX  = x;
-						startY  = y;
-						end = 1;
-						break;
+		do {
+			for (int x=1, end=0; x<map.GetLength(0)-1; x++) {
+				for (int y=1; y<map.GetLength(1)-1; y++) {
+					//Manager.tile.wall
+					if (map [x, y] == Manager.tile.nadda && IsOpen(map,x,y)) {
+						{
+							startX = x;
+							startY = y;
+							end = 1;
+							break;
+						}
 					}
 				}
+				if (end == 1)
+					break;
 			}
-			if(end==1) break;
-		}
-		Debug.Log ("StartX: " + startX + " " + "StartY: " + startY );
-		if(startX < 0 || startY <0){//We didn't find any empty spaces done
-			return;
-		}
+			Debug.Log ("StartX: " + startX + " " + "StartY: " + startY);
+			if (startX < 0 || startY < 0) {//We didn't find any empty spaces done
+				//Update the map
+				room.map = map;
+				done = true;
+				return;
+			}else{
 
-		GenerateStep (ref map, startX, startY);
+				GenerateStep (ref map, startX, startY);
+				
+				//Update the map
+				room.map = map;
+				startX=-1;
+				startY=-1;
+			}
 
-		//Update the map
-		room.map = map;
+
+		} while(!done);
+
+
 	}
 	/*
 	public void Generate(Room room){
