@@ -199,10 +199,18 @@ public class Room : MonoBehaviour
     {
         string dbgStr = "";
         //does it not collide with any rooms?
-        for (int x = -1; x < width + 1; x++)
+
+        for (int x = -3; x < width + 1; x++)
         {
-            for (int y = -1; y < height + 1; y++)
+
+            if (tryPosiX + x < 0) continue;
+            if (tryPosiX + x > map_.GetLength(0)) continue;
+
+            for (int y = -3; y < height + 1; y++)
             {
+                if (tryPosiY + y < 0) continue;
+                if (tryPosiY + y > map.GetLength(1)) continue;
+
                 Manager.tile tryTile = map_[tryPosiX + x, tryPosiY + y];
                 dbgStr += tryTile + "(" + (tryPosiX + x) + ":" + (tryPosiY + y) + "),";
                 if (tryTile == Manager.tile.room)
