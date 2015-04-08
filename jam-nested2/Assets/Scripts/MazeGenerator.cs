@@ -21,6 +21,10 @@ public class MazeGenerator {
 			return;
 		if (map[currentX,currentY] != Manager.tile.nadda )
 			return;
+		if(!IsOpen(map,currentX,currentY))
+			return;
+		//if(IsConnector(map,currentX,currentY))
+		//	return;
 		//Manager.tile[,] directions = 1;
 		//Shuffle the directions
 		map [currentX, currentY] = Manager.tile.floor;
@@ -203,6 +207,29 @@ public class MazeGenerator {
 		return false;
 	}
 
+	bool IsOpen(Manager.tile[,] map,int x, int y){
+		if (map [x, y] == Manager.tile.nadda) {
+			int count=0;
+			//Check adjacent
+			for (int i=-1; i<2; i++) {
+				for (int j=-1; j<2; j++) {
+					if(i==x && j==y){
+					}else{
+						if ((map[x+i,y+j] == Manager.tile.floor || map[x+i,y+j] == Manager.tile.room))//North
+							count++;
+					}
+				}
+			}
+
+			if(count>2){
+				//Debug.Log (count);
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
 	Manager.direction FindRandomEmptyDirection(Manager.tile[,] map,int x, int y){
 		bool north	=	IsEmpty(map,x,y+1),
 			east	=	IsEmpty(map,x+1,y), 
@@ -261,7 +288,7 @@ public class MazeGenerator {
 			}
 		}*/
 		Manager.tile wall = Manager.tile.wall;
-		Manager.tile floor = Manager.tile.floor;
+		Manager.tile floor = Manager.tile.wall;
 		if ((map[x-1,y] == wall || map[x-1,y] == floor) && (map[x+1,y] == wall || map[x+1,y] == floor) ) {//West and East
 			count++;
 		}
@@ -284,7 +311,7 @@ public class MazeGenerator {
 
 
 
-		if(count > 0){
+		if(count > 1){
 			Debug.Log("IsConnector");
 			return true;
 		}

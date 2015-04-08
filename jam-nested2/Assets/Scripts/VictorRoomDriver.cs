@@ -14,7 +14,9 @@ public class VictorRoomDriver : MonoBehaviour {
 		Room room = go.GetComponent<Room>();
 		room.Generate( width, height, posi );
 		MazeGenerator maze = new MazeGenerator ();
+
 		maze.Generate(room);
+
 		room.Draw();
 		
 		
